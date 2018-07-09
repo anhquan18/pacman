@@ -6,12 +6,25 @@ import stage
 
 
 class Pacman(object):
+    class EatMode():
+        def __init__(self, string='normal'):
+            self.name = string
+        
+        def eat(self, fruit_map):
+            pacman_x, pacman_y = stage.find_corrdinate(pacman.x, pacman.y) 
+            fruit_pix_x, fruit_pix_y = stage.convert_to_pixel(pacman_x, pacman_y)
+
+            if pacman.x + pacman_size > (fruit_pix_x + wall_size/2) >  and pacman.y == (fruit_pix_y + pacman_size):
+                print"worked"
+                fruit_map[pacman_y][pacman_x] = no_fruit
+            
+
     def animate(self):
         pygame.draw.circle(stage.game_dis,yellow,(self.x, self.y),pacman_size/2)
 
-    class Mode(object):
-        def __init__(self, string='normal'):
-            self.name = string
+    def update(self, fruit_map, direction):
+        self.move(direction)
+        self.eat_mode.eat(fruit_map)
 
     def __init__(self):
         self.reset_state()
@@ -22,7 +35,7 @@ class Pacman(object):
     def reset_state(self):
         self.x, self.y = [3*wall_size + wall_size/2, 9*wall_size + wall_size/2]
         self.old_x, self.old_y = self.x, self.y
-        self.mode = self.Mode()
+        self.eat_mode = self.EatMode()
         self.direction = 'nothing'
 
     def move(self, self_dir):

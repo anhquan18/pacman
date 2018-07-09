@@ -30,6 +30,7 @@ if __name__ == '__main__':
                 elif event.key == K_r:
                    screen.reset_screen()
                    direction = 'nothing'
-        character.pacman.move(direction)
+
+        character.pacman.update(stage.world_state.fruit_map, direction)
 
         game_fps.tick(60)

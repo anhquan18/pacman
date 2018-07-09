@@ -53,6 +53,7 @@ class WorldState(object):
         self.game_map = map.create_game_map()
         self.fruit_map = map.create_fruit_map()
 
+
 class ReadyScreen(Screen):
     def __init__(self):
         pass
@@ -76,10 +77,12 @@ class GameScreen(Screen):
     def update(self):
         pass
 
+
 def convert_to_pixel(x, y):
     x_pixel = wall_size * x
     y_pixel = wall_size * y
     return x_pixel, y_pixel
+
 
 def find_corrdinate(x, y):
     for y_cor in range(game_max_row):
@@ -89,6 +92,7 @@ def find_corrdinate(x, y):
             if check_box.collidepoint(x, y):
                 return x_cor, y_cor
     return None, None
+
 
 def check_wall(x, y):
     x, y = find_corrdinate(x, y)
@@ -115,6 +119,7 @@ def check_wall(x, y):
         wall.append('top_left')
 
     return wall
+
 
 def move_easier(wall_direction):
     self_x, self_y = find_corrdinate(character.pacman.x, character.pacman.y)
