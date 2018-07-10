@@ -29,8 +29,8 @@ if __name__ == '__main__':
                     direction = 'right'
                 elif event.key == K_r:
                    screen.reset_screen()
-                   direction = 'nothing'
+                   direction = 'left'
 
         character.pacman.update(stage.world_state.fruit_map, direction)
 
-        game_fps.tick(60)
+        game_fps.tick(40)

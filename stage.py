@@ -21,10 +21,8 @@ class Screen(object):
     def draw(self):
         for y in range(self.row):
             for x in range(self.col):
-                fruit = True
                 if world_state.game_map[y][x] == have_wall:
                     color = wall_color
-                    fruit = False
                 else:
                     color = black
                 pygame.draw.rect(game_dis, color, (x*wall_size,y*wall_size, wall_size, wall_size))
@@ -36,7 +34,6 @@ class Screen(object):
     def reset_screen(self):
         world_state.reset_map()
         character.pacman.reset_state()
-
     
     def change_screen(self):
         pass
@@ -98,8 +95,10 @@ def check_wall(x, y):
     x, y = find_corrdinate(x, y)
     wall = []
 
-    if x == 20 or y == 20 or x == 0 or y == 0:
-        return []
+    if x == None or y == None or \
+        x == game_min_col or x == (game_max_col -1) or \
+        y == game_min_row or y == (game_max_row -1):
+        return wall
 
     if world_state.game_map[y-1][x] == have_wall:
         wall.append('up')
@@ -124,6 +123,7 @@ def check_wall(x, y):
 def move_easier(wall_direction):
     self_x, self_y = find_corrdinate(character.pacman.x, character.pacman.y)
     threshhold = 40
+
     if len(wall_direction) > 0: # create limitness in order not to go through the wall
         for direction in wall_direction:
             if direction == 'up':
@@ -177,12 +177,12 @@ def move_easier(wall_direction):
 
     if (character.pacman.y - pacman_size/2) >= max_height:
         character.pacman.y = min_height - pacman_size/2
-    elif (character.pacman.x + pacman_size/2) >= max_width:
-        character.pacman.x = max_width - pacman_size/2
-    elif (character.pacman.y - pacman_size/2) < min_height:
-        character.pacman.y = min_height + pacman_size/2
-    elif (character.pacman.x - pacman_size/2) < min_width:
-        character.pacman.x = min_width + pacman_size/2
+    elif (character.pacman.x - pacman_size/2) >= max_width:
+        character.pacman.x = min_width - pacman_size/2
+    elif (character.pacman.y + pacman_size/2) <= min_height:
+        character.pacman.y = max_height + pacman_size/2
+    elif (character.pacman.x + pacman_size/2) <= min_width:
+        character.pacman.x = max_width + pacman_size/2
 
 
 world_state = WorldState()
