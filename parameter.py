@@ -8,7 +8,8 @@ game_max_col = 21
 game_min_row = 0
 game_min_col = 0
 no_fruit = 1
-pacman_size = wall_size 
+pacman_size = wall_size
+pacman_velo = 20.0
 max_height = wall_size * game_max_row
 max_width = wall_size * game_max_col
 

@@ -10,27 +10,25 @@ if __name__ == '__main__':
     game_fps = pygame.time.Clock()
     screen = stage.Screen()
     screen.display()
-    direction = 'nothing'
+    pacman_direction = 'right'
     
     while True:
-        screen.draw()
         for event in pygame.event.get():
             if event.type == QUIT or (event.type == KEYUP and event.key == K_ESCAPE):
                 pygame.quit()
                 sys.exit()
             elif event.type == KEYDOWN:
                 if event.key == K_UP:
-                    direction = 'up'
+                    pacman_direction = 'up'
                 elif event.key == K_DOWN:
-                    direction = 'down'
+                    pacman_direction = 'down'
                 elif event.key == K_LEFT:
-                    direction = 'left'
+                    pacman_direction = 'left'
                 elif event.key == K_RIGHT:
-                    direction = 'right'
+                    pacman_direction = 'right'
                 elif event.key == K_r:
                    screen.reset_screen()
-                   direction = 'left'
+                   pacman_direction = 'left'
 
-        character.pacman.update(stage.world_state.fruit_map, direction)
-
-        game_fps.tick(40)
+        screen.update(pacman_direction)
+        game_fps.tick(60)
