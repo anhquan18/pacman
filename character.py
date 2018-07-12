@@ -9,6 +9,22 @@ class Pacman(object):
     class EatMode():
         def __init__(self, string='normal'):
             self.name = string
+
+        def angle_of_the_mouth(self, direction):
+            if direction == 'up':
+                angle_list = [(radians(150), radians(390)), (radians(135), radians(405)), (radians(120), radians(420)), (radians(105), radians(435))]
+            elif direction == 'down':
+                angle_list = [(radians(-30), radians(210)), (radians(-45), radians(225)), (radians(-60), radians(240)), (radians(-75), radians(255))] 
+            elif direction == 'right':
+                angle_list = [(radians(30), radians(300)), (radians(45), radians(315)), (radians(30), radians(330)), (radians(15), radians(345))]
+            elif direction == 'left':
+                angle_list = [(radians(-125), radians(125)), (radians(-135), radians(135)), (radians(-150), radians(150)), (radians(-165), radians(165))]
+            else:
+                angle_list = []
+
+            angle_list.append((radians(0), radians(360)))
+            angle_list += list(reversed(angle_list))
+            return angle_list
         
         def eat(self, fruit_map):
             pacman_x, pacman_y = stage.find_corrdinate(pacman.x, pacman.y) 
@@ -21,31 +37,11 @@ class Pacman(object):
             if (pacman.x + pacman_size/2) > (fruit_pix_x + wall_size/2) > (pacman.x - pacman_size/2) and (pacman.y -pacman_size/2) < (fruit_pix_y + pacman_size/2) < (pacman.y + pacman_size/2):
                 fruit_map[pacman_y][pacman_x] = no_fruit
         
-        def animation(self, direction):
-            if direction == 'up':
-                angle_list = [(radians(135), radians(405)), (radians(120), radians(420)), (radians(105), radians(435))]
-            elif direction == 'down':
-                angle_list = [(radians(-45), radians(225)), (radians(-60), radians(240)), (radians(-75), radians(255))] 
-            elif direction == 'right':
-                angle_list =  [(radians(45), radians(315)), (radians(30), radians(330)), (radians(15), radians(345))]
-            elif direction == 'left':
-                angle_list = [(radians(-135), radians(135)), (radians(-150), radians(150)), (radians(-165), radians(165))]
-            else:
-                return
-
-            angle_list.append((radians(0), radians(0)))
-            
-            for start_angle, end_angle in angle_list:
+        def animation(self, mouth_angle_list):
+            for start_angle, end_angle in mouth_angle_list:
                 pygame.draw.arc(stage.game_dis, yellow,(pacman.x -pacman_size/2, pacman.y -pacman_size/2, pacman_size, pacman_size), start_angle, end_angle, pacman_size/2)
                 pygame.display.update()
-                pygame.time.wait(15)
-
-            angle_list.reverse()
-
-            for start_angle, end_angle in angle_list:
-                pygame.draw.arc(stage.game_dis, yellow,(pacman.x -pacman_size/2, pacman.y -pacman_size/2, pacman_size, pacman_size), start_angle, end_angle, pacman_size/2)
-                pygame.display.update()
-                pygame.time.wait(15)
+                pygame.time.wait(20)
 
     def __init__(self):
         self.state_initial()
@@ -53,7 +49,8 @@ class Pacman(object):
     def update(self, fruit_map, direction):
         self.move(direction)
         self.eat_mode.eat(fruit_map)
-        self.eat_mode.animation(self.direction)
+        angle_list = self.eat_mode.angle_of_the_mouth(direction)
+        self.eat_mode.animation(angle_list)
 
     def terminate(self):
         pass
