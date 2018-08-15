@@ -1,7 +1,5 @@
 import stage
 import sys
-import map
-import character
 import pygame
 from pygame.locals import *
 
@@ -29,6 +27,5 @@ if __name__ == '__main__':
                 elif event.key == K_r:
                    screen.reset_screen()
                    pacman_direction = 'left'
-
         screen.update(pacman_direction)
-        game_fps.tick(60)
+        game_fps.tick(80)

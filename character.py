@@ -1,4 +1,3 @@
-import sys
 from math import radians
 from parameter import *
 import pygame
@@ -12,13 +11,17 @@ class Pacman(object):
 
         def angle_of_the_mouth(self, direction):
             if direction == 'up':
-                angle_list = [(radians(150), radians(390)), (radians(135), radians(405)), (radians(120), radians(420)), (radians(105), radians(435))]
+                angle_list = [(radians(150), radians(390)), (radians(135), radians(405)), 
+                              (radians(120), radians(420)), (radians(105), radians(435))]
             elif direction == 'down':
-                angle_list = [(radians(-30), radians(210)), (radians(-45), radians(225)), (radians(-60), radians(240)), (radians(-75), radians(255))] 
+                angle_list = [(radians(-30), radians(210)), (radians(-45), radians(225)), 
+                              (radians(-60), radians(240)), (radians(-75), radians(255))] 
             elif direction == 'right':
-                angle_list = [(radians(30), radians(300)), (radians(45), radians(315)), (radians(30), radians(330)), (radians(15), radians(345))]
+                angle_list = [(radians(30), radians(300)), (radians(45), radians(315)), 
+                              (radians(30), radians(330)), (radians(15), radians(345))]
             elif direction == 'left':
-                angle_list = [(radians(-125), radians(125)), (radians(-135), radians(135)), (radians(-150), radians(150)), (radians(-165), radians(165))]
+                angle_list = [(radians(-125), radians(125)), (radians(-135), radians(135)), 
+                              (radians(-150), radians(150)), (radians(-165), radians(165))]
             else:
                 angle_list = []
 
@@ -39,18 +42,20 @@ class Pacman(object):
         
         def animation(self, mouth_angle_list):
             for start_angle, end_angle in mouth_angle_list:
-                pygame.draw.arc(stage.game_dis, yellow,(pacman.x -pacman_size/2, pacman.y -pacman_size/2, pacman_size, pacman_size), start_angle, end_angle, pacman_size/2)
+                pygame.draw.arc(stage.game_dis, yellow,(pacman.x -pacman_size/2, pacman.y - pacman_size/2, pacman_size, pacman_size), start_angle, end_angle, pacman_size/2)
                 pygame.display.update()
-                pygame.time.wait(20)
+                pygame.time.wait(8)
+                yield
 
     def __init__(self):
         self.state_initial()
 
     def update(self, fruit_map, direction):
-        self.move(direction)
-        self.eat_mode.eat(fruit_map)
         angle_list = self.eat_mode.angle_of_the_mouth(direction)
-        self.eat_mode.animation(angle_list)
+        for animate in self.eat_mode.animation(angle_list):
+            self.update_direction(direction)
+            self.eat_mode.eat(fruit_map)
+            yield
 
     def terminate(self):
         pass
@@ -63,11 +68,11 @@ class Pacman(object):
         self.x_movement = 0
         self.y_movement = 0
 
-    def move(self, self_dir):
+    def update_direction(self, self_dir):
         self.direction = self_dir
         self.old_x = self.x
         self.old_y = self.y
-    
+
         if self.direction == 'left':
             self.x -= pacman_velo
         elif self.direction == 'right':
@@ -82,11 +87,12 @@ class Pacman(object):
 
 
 class Ghost(object):
-    class Animation(object):
-        pass
-
     def __init__(self, color):
         self.color = color
+        self.x, self.y = [9*wall_size + wall_size/2, 9*wall_size + wall_size/2]
+        self.dis_btw_eyes = 20
+        self.dis_lower_half_to_eyes = 10
+        self.head_size = 80
 
     def terminate_pacman(self):
         pass
@@ -100,5 +106,17 @@ class Ghost(object):
     def move(self):
         pass
 
+    def animation(self):
+        pygame.draw.circle(stage.game_dis, self.color, (self.x, self.y), pacman_size/2)
+
+    def update(self):
+        self.animation()
+
+    def astar(self, start_node, goal_node):
+        open_set = []
+        close_set = [()]
+
+
+
 pacman = Pacman()
-ghost = Ghost(red)
+ghost = Ghost(dark_red)

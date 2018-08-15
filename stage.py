@@ -19,26 +19,39 @@ class Screen(object):
         pygame.display.set_caption('PACMAN')
 
     def update(self, pacman_direction):
-        self.draw_screen()
-        character.pacman.update(world_state.fruit_map, pacman_direction)
-        pygame.display.update()
+        for new_update in character.pacman.update(world_state.fruit_map, pacman_direction):
+            self.draw_screen(self.game_over())
+            character.ghost.update()
+            pygame.display.update()
 
-    def draw_screen(self):
+    def draw_screen(self, finished):
         for y in range(self.row):
             for x in range(self.col):
                 if world_state.game_map[y][x] == have_wall:
                     color = wall_color
                 else:
                     color = black
+
                 pygame.draw.rect(game_dis, color, (x*wall_size,y*wall_size, wall_size, wall_size))
                 if world_state.fruit_map[y][x] != no_fruit:
                     pygame.draw.circle(game_dis, yellow, (x*wall_size + (wall_size/2), y*wall_size + (wall_size/2)),8)
 
     def reset_screen(self):
         world_state.reset_map()
-        character.pacman.reset_state()
+        character.pacman.state_initial()
     
     def change_screen(self):
+        pass
+
+    def game_over(self):
+        for y in range(self.row):
+            for x in range(self.col):
+                if world_state.fruit_map[y][x] != no_fruit:
+                    return False
+        else:
+            return True
+
+    def color_for_finishing(self, color):
         pass
 
 
