@@ -28,4 +28,4 @@ if __name__ == '__main__':
                    screen.reset_screen()
                    pacman_direction = 'left'
         screen.update(pacman_direction)
-        game_fps.tick(80)
+        game_fps.tick(25)
