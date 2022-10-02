@@ -42,7 +42,7 @@ class Pacman(object):
         
         def animation(self, mouth_angle_list):
             for start_angle, end_angle in mouth_angle_list:
-                pygame.draw.arc(stage.game_dis, yellow,(pacman.x -pacman_size/2, pacman.y - pacman_size/2, pacman_size, pacman_size), start_angle, end_angle, pacman_size/2)
+                pygame.draw.arc(stage.game_dis, yellow,(int(pacman.x -pacman_size/2), int(pacman.y - pacman_size/2), int(pacman_size), int(pacman_size)), int(start_angle), int(end_angle), int(pacman_size/2))
                 pygame.display.update()
                 pygame.time.wait(8)
                 yield
